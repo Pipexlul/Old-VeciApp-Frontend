@@ -4,10 +4,12 @@ import {
   Navigate,
 } from "react-router-dom";
 
+import { Root } from "./pages/pages.tsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: null,
+    element: <Root />,
     errorElement: null,
     children: [
       {
