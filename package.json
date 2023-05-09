@@ -15,6 +15,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@googleapis/analyticsreporting": "^1.0.0",
     "antd": "^5.4.5",
     "framer-motion": "^10.12.4",
