@@ -1,3 +1,5 @@
+import PrivateRoute from "./PrivateRoute";
+
 import { createHashRouter, Navigate } from "react-router-dom";
 
 const router = createHashRouter([
@@ -23,12 +25,22 @@ const router = createHashRouter([
             element: <Navigate to={"/login/user"} />,
           },
           {
-            path: "/login/:client",
+            path: "/:client",
             element: null,
           },
         ],
       },
     ],
+  },
+  {
+    path: "/dashboard/user",
+    element: <PrivateRoute notAuthPath="/login/user" />,
+    errorElement: null,
+  },
+  {
+    path: "/dashboard/owner",
+    element: <PrivateRoute notAuthPath="/login/owner" />,
+    errorElement: null,
   },
 ]);
 
