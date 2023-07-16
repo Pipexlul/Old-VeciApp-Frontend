@@ -42,5 +42,5 @@ module.exports = {
     ],
     "import/prefer-default-export": 0,
   },
-  ignorePatterns: ["**/*.js", "**/*.cjs", "**/.css", "vite.config.ts"],
+  ignorePatterns: ["**/*.js", "**/*.cjs", "**/*.css", "vite.config.ts"],
 };
