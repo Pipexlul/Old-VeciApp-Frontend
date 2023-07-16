@@ -3,9 +3,11 @@ import { Outlet } from "react-router-dom";
 const PublicRoot: React.FC = () => {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
+      <h1>Public Header</h1>
       <Outlet />
-      <Footer />
+      {/* <Footer /> */}
+      <p>Public Footer</p>
     </>
   );
 };

@@ -1,31 +1,38 @@
-import PrivateRoute from "./PrivateRoute";
-
 import { createHashRouter, Navigate } from "react-router-dom";
+
+import PrivateRoute from "./PrivateRoute";
+import { publicPages } from "../pages";
+
+const { PublicRoot } = publicPages;
 
 const router = createHashRouter([
   {
     path: "/",
-    element: null,
+    element: <PublicRoot />,
     errorElement: null,
     children: [
       {
         index: true,
-        element: <Navigate to={"/home"} />,
+        element: <Navigate to="/home" />,
       },
       {
-        path: "/home",
+        path: "home",
         element: null,
       },
       {
-        path: "/login",
+        path: "login",
         element: null,
         children: [
           {
             index: true,
-            element: <Navigate to={"/login/user"} />,
+            element: <Navigate to="/login/user" />,
           },
           {
-            path: "/:client",
+            path: "user",
+            element: null,
+          },
+          {
+            path: "owner",
             element: null,
           },
         ],
