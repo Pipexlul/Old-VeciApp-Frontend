@@ -1,3 +1,4 @@
+/** @type {import('eslint').ESLint.ConfigData}*/
 module.exports = {
   env: {
     browser: true,
@@ -28,7 +29,6 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
     project: "tsconfig.json",
-    tsconfigRootDir: __dirname,
   },
   plugins: ["@typescript-eslint", "react"],
   rules: {
@@ -42,4 +42,5 @@ module.exports = {
     ],
     "import/prefer-default-export": 0,
   },
+  ignorePatterns: ["**/*.js", "**/*.cjs", "vite.config.ts"],
 };
