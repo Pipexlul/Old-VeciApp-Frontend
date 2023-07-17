@@ -1,6 +1,9 @@
+import { type PropsWithChildren } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-import type PrivateRouteProps from "../types/props/PrivateRouteProps";
+interface PrivateRouteProps extends PropsWithChildren {
+  notAuthPath: string;
+}
 
 const PrivateRoute: React.FC<PrivateRouteProps> = () => {
   const isAuthenticated = true; // TODO: implement hook
@@ -8,4 +11,5 @@ const PrivateRoute: React.FC<PrivateRouteProps> = () => {
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 
+export { type PrivateRouteProps };
 export default PrivateRoute;
