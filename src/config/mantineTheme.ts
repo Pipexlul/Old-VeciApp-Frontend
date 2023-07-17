@@ -1,5 +1,5 @@
-import { type MantineTheme } from "@mantine/core";
+import { type MantineThemeOverride } from "@mantine/core";
 
-const mantineTheme: MantineTheme = {};
+const mantineTheme: MantineThemeOverride = {};
 
 export default mantineTheme;
