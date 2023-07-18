@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import {
   createStyles,
   Header,
@@ -8,6 +8,7 @@ import {
   Paper,
   Transition,
   Title,
+  Box,
   rem,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -102,24 +103,21 @@ interface PublicHeaderProps {
 
 const PublicHeader: React.FC<PublicHeaderProps> = ({ links }) => {
   const [opened, { toggle, close }] = useDisclosure(false);
-  const [active, setActive] = useState(links[0].href);
   const { classes, cx } = useStyles();
 
   const items = links.map((link) => (
-    <a
-      key={link.label}
-      href={link.href}
-      className={cx(classes.link, {
-        [classes.linkActive]: active === link.href,
-      })}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(link.href);
-        close();
+    <NavLink key={link.href} to={link.href}>
+      {({ isActive }) => {
+        return (
+          <Box
+            onClick={close}
+            className={cx(classes.link, { [classes.linkActive]: isActive })}
+          >
+            {link.label}
+          </Box>
+        );
       }}
-    >
-      {link.label}
-    </a>
+    </NavLink>
   ));
 
   return (
