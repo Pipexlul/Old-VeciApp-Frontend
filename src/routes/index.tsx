@@ -20,6 +20,14 @@ const router = createHashRouter([
         element: null,
       },
       {
+        path: "features",
+        element: null,
+      },
+      {
+        path: "contact",
+        element: null,
+      },
+      {
         path: "login",
         element: null,
         children: [
