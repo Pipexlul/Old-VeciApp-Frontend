@@ -44,5 +44,11 @@ module.exports = {
     "import/prefer-default-export": 0,
     "@typescript-eslint/no-unused-vars": [2, { argsIgnorePattern: "^_" }],
   },
-  ignorePatterns: ["**/*.js", "**/*.cjs", "**/*.css", "vite.config.ts"],
+  ignorePatterns: [
+    "**/*.js",
+    "**/*.cjs",
+    "**/*.css",
+    "vite.config.ts",
+    "typings/",
+  ],
 };
