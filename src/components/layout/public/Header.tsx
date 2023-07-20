@@ -21,6 +21,7 @@ const useStyles = createStyles((theme) => ({
   root: {
     position: "relative",
     zIndex: 1,
+    marginBottom: rem(60),
   },
 
   dropdown: {
@@ -120,7 +121,7 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ links }) => {
   ));
 
   return (
-    <Header height={HEADER_HEIGHT} mb={120} className={classes.root}>
+    <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header}>
         <Title order={1}>VeciApp</Title>
         <Group spacing={5} className={classes.links}>
