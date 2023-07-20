@@ -97,7 +97,6 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface PublicHeaderProps {
-  // links: { link: string; label: string }[];
   links: LinkData[];
 }
 
