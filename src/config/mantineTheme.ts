@@ -5,8 +5,9 @@ const mantineTheme: MantineThemeOverride = {
   primaryColor: "orange",
   primaryShade: 6,
   globalStyles: (_theme) => ({
-    body: {
+    "#root": {
       minHeight: "100vh",
+      position: "relative",
     },
   }),
 };
