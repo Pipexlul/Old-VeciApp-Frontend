@@ -21,8 +21,13 @@ const useStyles = createStyles((theme) => ({
   root: {
     position: "relative",
     zIndex: 1,
-    marginTop: rem(30),
-    marginBottom: rem(30),
+    marginTop: rem(20),
+    marginBottom: rem(20),
+
+    [theme.fn.smallerThan("sm")]: {
+      marginTop: rem(10),
+      marginBottom: rem(10),
+    },
   },
 
   dropdown: {
