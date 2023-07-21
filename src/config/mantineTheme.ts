@@ -7,7 +7,8 @@ const mantineTheme: MantineThemeOverride = {
   globalStyles: (_theme) => ({
     "#root": {
       minHeight: "100vh",
-      position: "relative",
+      display: "flex",
+      flexDirection: "column",
     },
   }),
 };

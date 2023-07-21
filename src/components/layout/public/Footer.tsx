@@ -13,12 +13,10 @@ const FOOTER_HEIGHT = rem(120);
 
 const useStyles = createStyles((theme) => ({
   footer: {
-    marginTop: rem(60),
+    marginTop: "auto",
     borderTop: `${rem(1)} solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
     }`,
-    position: "absolute",
-    bottom: 0,
   },
 
   inner: {
