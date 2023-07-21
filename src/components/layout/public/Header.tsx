@@ -1,8 +1,9 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import {
   createStyles,
   Header,
   Container,
+  Divider,
   Group,
   Burger,
   Paper,
@@ -11,7 +12,7 @@ import {
   Box,
   rem,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 import type { LinkData } from "../../../types/NavLinksConfig";
 
@@ -101,6 +102,14 @@ const useStyles = createStyles((theme) => ({
         .color,
     },
   },
+
+  registerBtn: {
+    backgroundColor: theme.fn.rgba(theme.colors.cyan[6], 0.5),
+
+    "&:hover": {
+      backgroundColor: theme.fn.rgba(theme.colors.cyan[6], 0.7),
+    },
+  },
 }));
 
 interface PublicHeaderProps {
@@ -109,7 +118,9 @@ interface PublicHeaderProps {
 
 const PublicHeader: React.FC<PublicHeaderProps> = ({ links }) => {
   const [opened, { toggle, close }] = useDisclosure(false);
-  const { classes, cx } = useStyles();
+  const { classes, cx, theme } = useStyles();
+
+  const isSM = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
 
   const items = links.map((link) => (
     <NavLink key={link.href} to={link.href}>
@@ -125,6 +136,15 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ links }) => {
       }}
     </NavLink>
   ));
+
+  items.push(
+    <Divider color="orange" orientation={isSM ? "horizontal" : "vertical"} />
+  );
+  items.push(
+    <Link className={cx(classes.link, classes.registerBtn)} to="register">
+      Registrarse
+    </Link>
+  );
 
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
