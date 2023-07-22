@@ -121,6 +121,7 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ links }) => {
   const { classes, cx, theme } = useStyles();
 
   const isSM = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
+  const dividerMx = isSM ? undefined : theme.spacing.sm;
 
   const items = links.map((link) => (
     <NavLink key={link.href} to={link.href}>
@@ -138,7 +139,11 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ links }) => {
   ));
 
   items.push(
-    <Divider color="orange" orientation={isSM ? "horizontal" : "vertical"} />
+    <Divider
+      color="orange"
+      mx={dividerMx}
+      orientation={isSM ? "horizontal" : "vertical"}
+    />
   );
   items.push(
     <Link className={cx(classes.link, classes.registerBtn)} to="register">
