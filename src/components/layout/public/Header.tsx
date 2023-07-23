@@ -140,13 +140,18 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ links }) => {
 
   items.push(
     <Divider
+      key="_divider"
       color="orange"
       mx={dividerMx}
       orientation={isSM ? "horizontal" : "vertical"}
     />
   );
   items.push(
-    <Link className={cx(classes.link, classes.registerBtn)} to="register">
+    <Link
+      key="_registerBtn"
+      className={cx(classes.link, classes.registerBtn)}
+      to="register"
+    >
       Registrarse
     </Link>
   );
