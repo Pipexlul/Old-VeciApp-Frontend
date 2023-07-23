@@ -3,7 +3,12 @@ import { createHashRouter, Navigate } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import { publicPages } from "../pages";
 
-const { PublicRoot, PublicHome: Home, PublicFeatures: Features } = publicPages;
+const {
+  PublicRoot,
+  PublicHome: Home,
+  PublicFeatures: Features,
+  PublicContact: Contact,
+} = publicPages;
 
 const router = createHashRouter([
   {
@@ -25,7 +30,7 @@ const router = createHashRouter([
       },
       {
         path: "contact",
-        element: null,
+        element: <Contact />,
       },
       {
         path: "login",
