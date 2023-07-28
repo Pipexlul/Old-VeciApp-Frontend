@@ -8,6 +8,7 @@ const {
   PublicHome: Home,
   PublicFeatures: Features,
   PublicContact: Contact,
+  PublicRegister: Register,
 } = publicPages;
 
 const router = createHashRouter([
@@ -49,6 +50,14 @@ const router = createHashRouter([
             element: null,
           },
         ],
+      },
+      {
+        path: "register",
+        element: <Navigate to="/register/user" replace />,
+      },
+      {
+        path: "register/user",
+        element: <Register />,
       },
     ],
   },
