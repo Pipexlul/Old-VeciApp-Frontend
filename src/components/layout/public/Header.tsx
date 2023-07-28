@@ -1,4 +1,4 @@
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   createStyles,
   Header,
@@ -147,13 +147,20 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ links }) => {
     />
   );
   items.push(
-    <Link
-      key="_registerBtn"
-      className={cx(classes.link, classes.registerBtn)}
-      to="register"
-    >
-      Registrarse
-    </Link>
+    <NavLink key="_registerBtn" to="register">
+      {({ isActive }) => {
+        return (
+          <Box
+            onClick={close}
+            className={cx(classes.link, classes.registerBtn, {
+              [classes.linkActive]: isActive,
+            })}
+          >
+            Registrarse
+          </Box>
+        );
+      }}
+    </NavLink>
   );
 
   return (
