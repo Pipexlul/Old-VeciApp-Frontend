@@ -53,10 +53,6 @@ const router = createHashRouter([
       },
       {
         path: "register",
-        element: <Navigate to="/register/user" replace />,
-      },
-      {
-        path: "register/user",
         element: <Register />,
       },
     ],
