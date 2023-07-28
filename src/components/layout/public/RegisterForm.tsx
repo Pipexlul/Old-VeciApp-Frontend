@@ -15,10 +15,15 @@ import {
   PasswordInput,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
+import { modals } from "@mantine/modals";
 
 import PasswordText from "../../inputs/PasswordText";
 
 import { useIsSM } from "../../../hooks/useIsSM";
+
+import { confirmModals } from "../../../config/modals";
+
+const { register: registerModal } = confirmModals;
 
 const MARGIN_X = 100;
 const MARGIN_TOP = 100;
@@ -185,8 +190,26 @@ const RegisterForm: React.FC = () => {
           />
         </SimpleGrid>
 
+        {/* TODO: Integrate form submission with backend */}
         <Group position="center" mt="xl">
-          <Button type="submit" size="md">
+          <Button
+            type="button"
+            size="md"
+            onClick={() =>
+              modals.openConfirmModal(
+                registerModal(
+                  form.values.type,
+                  () => {
+                    console.log("Submitted form:", form.values);
+                  },
+                  () => {
+                    console.log("Canceled form submission");
+                    form.reset();
+                  }
+                )
+              )
+            }
+          >
             Crear cuenta
           </Button>
         </Group>
