@@ -200,6 +200,7 @@ const RegisterForm: React.FC = () => {
                 registerModal(
                   form.values.type,
                   () => {
+                    form.validate();
                     console.log("Submitted form:", form.values);
                   },
                   () => {
