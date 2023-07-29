@@ -14,6 +14,7 @@ import {
   createStyles,
   PasswordInput,
 } from "@mantine/core";
+import { useDisclosure, useTimeout } from "@mantine/hooks";
 import { useForm, zodResolver } from "@mantine/form";
 import { modals } from "@mantine/modals";
 
@@ -22,6 +23,8 @@ import PasswordText from "../../inputs/PasswordText";
 import { useIsSM } from "../../../hooks/useIsSM";
 
 import { confirmModals } from "../../../config/modals";
+
+import { withMergeFormPropWithChangeHandler } from "../../../utils/combineHandlers";
 
 const { register: registerModal } = confirmModals;
 
@@ -74,8 +77,12 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+type TransformedRegisterShape = (
+  obj: RegisterShape
+) => Omit<RegisterShape, "confirmPassword">;
+
 const RegisterForm: React.FC = () => {
-  const form = useForm<RegisterShape>({
+  const form = useForm<RegisterShape, TransformedRegisterShape>({
     initialValues: {
       type: "user",
       name: "",
@@ -86,11 +93,33 @@ const RegisterForm: React.FC = () => {
     },
     validate: zodResolver(valSchema),
     validateInputOnBlur: true,
+    validateInputOnChange: true,
+
+    transformValues: (values) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { confirmPassword, ...sentFields } = values;
+
+      return sentFields;
+    },
   });
 
+  const [validForm, { open: setAsValid, close: setAsInvalid }] =
+    useDisclosure(false);
   const { classes, theme } = useStyles();
-
   const isSM = useIsSM();
+  const { start: validateButton } = useTimeout(() => {
+    if (form.isValid()) {
+      setAsValid();
+    } else {
+      setAsInvalid();
+    }
+  }, 10);
+
+  const checkValidation = () => {
+    validateButton();
+  };
+
+  const mergeProps = withMergeFormPropWithChangeHandler(checkValidation);
 
   return (
     <Paper shadow="lg" withBorder={!isSM} className={classes.root}>
@@ -140,7 +169,7 @@ const RegisterForm: React.FC = () => {
             name="name"
             variant="filled"
             required
-            {...form.getInputProps("name")}
+            {...mergeProps(form.getInputProps("name"))}
           />
           <TextInput
             label="Apellido"
@@ -148,7 +177,7 @@ const RegisterForm: React.FC = () => {
             name="lastName"
             variant="filled"
             required
-            {...form.getInputProps("lastName")}
+            {...mergeProps(form.getInputProps("lastName"))}
           />
         </SimpleGrid>
 
@@ -159,7 +188,7 @@ const RegisterForm: React.FC = () => {
           name="email"
           variant="filled"
           required
-          {...form.getInputProps("email")}
+          {...mergeProps(form.getInputProps("email"))}
         />
 
         <SimpleGrid
@@ -175,7 +204,7 @@ const RegisterForm: React.FC = () => {
             variant="filled"
             maxLength={20}
             required
-            {...form.getInputProps("password")}
+            {...mergeProps(form.getInputProps("password"))}
           />
 
           <PasswordInput
@@ -186,7 +215,7 @@ const RegisterForm: React.FC = () => {
             variant="filled"
             maxLength={20}
             required
-            {...form.getInputProps("confirmPassword")}
+            {...mergeProps(form.getInputProps("confirmPassword"))}
           />
         </SimpleGrid>
 
@@ -195,17 +224,17 @@ const RegisterForm: React.FC = () => {
           <Button
             type="button"
             size="md"
+            disabled={!validForm}
             onClick={() =>
               modals.openConfirmModal(
                 registerModal(
                   form.values.type,
                   () => {
-                    form.validate();
-                    console.log("Submitted form:", form.values);
+                    console.log("Submitted form:", form.getTransformedValues());
+                    // form.reset(); // TODO: Enable reset on success from backend
                   },
                   () => {
                     console.log("Canceled form submission");
-                    form.reset();
                   }
                 )
               )
