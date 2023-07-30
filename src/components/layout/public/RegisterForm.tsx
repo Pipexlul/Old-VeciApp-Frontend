@@ -121,13 +121,11 @@ const RegisterForm: React.FC = () => {
 
   const mergeProps = withMergeFormPropWithChangeHandler(checkValidation);
 
+  // TODO: Move max password length into a single source of truth
+
   return (
     <Paper shadow="lg" withBorder={!isSM} className={classes.root}>
-      <form
-        onSubmit={form.onSubmit((_vals, e) => {
-          e.preventDefault();
-        })}
-      >
+      <form>
         <Title
           order={2}
           size="h1"
