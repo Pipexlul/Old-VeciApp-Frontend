@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   createStyles,
   Header,
@@ -120,6 +120,9 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ links }) => {
   const [opened, { toggle, close }] = useDisclosure(false);
   const { classes, cx, theme } = useStyles();
 
+  const location = useLocation();
+  const isInLogin = location.pathname.startsWith("/login/");
+
   const isSM = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
   const dividerMx = isSM ? undefined : theme.spacing.sm;
 
@@ -160,6 +163,18 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ links }) => {
           </Box>
         );
       }}
+    </NavLink>
+  );
+  items.push(
+    <NavLink key="_loginBtn" to="login/">
+      <Box
+        onClick={close}
+        className={cx(classes.link, classes.registerBtn, {
+          [classes.linkActive]: isInLogin,
+        })}
+      >
+        Iniciar sesión
+      </Box>
     </NavLink>
   );
 
