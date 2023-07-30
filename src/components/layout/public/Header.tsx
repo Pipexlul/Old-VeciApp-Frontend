@@ -12,7 +12,9 @@ import {
   Box,
   rem,
 } from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
+
+import { useIsSM } from "../../../hooks/useIsSM";
 
 import type { LinkData } from "../../../types/NavLinksConfig";
 
@@ -123,7 +125,7 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ links }) => {
   const location = useLocation();
   const isInLogin = location.pathname.startsWith("/login/");
 
-  const isSM = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
+  const isSM = useIsSM();
   const dividerMx = isSM ? undefined : theme.spacing.sm;
 
   const items = links.map((link) => (

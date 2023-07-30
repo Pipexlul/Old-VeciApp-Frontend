@@ -12,8 +12,9 @@ import {
   rem,
   createStyles,
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { useForm, zodResolver } from "@mantine/form";
+
+import { useIsSM } from "../../../hooks/useIsSM";
 
 const MARGIN_X = 100;
 const MARGIN_TOP = 100;
@@ -63,8 +64,7 @@ const ContactForm: React.FC = () => {
 
   const { classes, theme } = useStyles();
 
-  // TODO: Extract isSM into it's own hook
-  const isSM = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
+  const isSM = useIsSM();
 
   return (
     <Paper shadow="lg" withBorder={!isSM} className={classes.root}>
