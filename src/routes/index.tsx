@@ -9,6 +9,7 @@ const {
   PublicFeatures: Features,
   PublicContact: Contact,
   PublicRegister: Register,
+  PublicLogin: Login,
 } = publicPages;
 
 const router = createHashRouter([
@@ -34,22 +35,8 @@ const router = createHashRouter([
         element: <Contact />,
       },
       {
-        path: "login",
-        element: null,
-        children: [
-          {
-            index: true,
-            element: <Navigate to="/login/user" />,
-          },
-          {
-            path: "user",
-            element: null,
-          },
-          {
-            path: "owner",
-            element: null,
-          },
-        ],
+        path: "login/:userType",
+        element: <Login />,
       },
       {
         path: "register",
