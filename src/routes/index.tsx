@@ -35,6 +35,10 @@ const router = createHashRouter([
         element: <Contact />,
       },
       {
+        path: "login",
+        element: <Navigate to="/login/user" />,
+      },
+      {
         path: "login/:userType",
         element: <Login />,
       },
