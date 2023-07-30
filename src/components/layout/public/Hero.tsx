@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   createStyles,
   Container,
@@ -117,24 +118,28 @@ const PublicHero: React.FC = () => {
             </Text>
 
             <Group>
-              <Button
-                variant="gradient"
-                gradient={{ from: "red", to: "orange" }}
-                size="xl"
-                className={classes.control}
-                mt={40}
-              >
-                Zona Cliente
-              </Button>
-              <Button
-                variant="gradient"
-                gradient={{ from: "red", to: "orange", deg: -45 }}
-                size="xl"
-                className={classes.control}
-                mt={40}
-              >
-                Zona Almacenero/a
-              </Button>
+              <Link to="/login/user">
+                <Button
+                  variant="gradient"
+                  gradient={{ from: "red", to: "orange" }}
+                  size="xl"
+                  className={classes.control}
+                  mt={40}
+                >
+                  Zona Cliente
+                </Button>
+              </Link>
+              <Link to="/login/owner">
+                <Button
+                  variant="gradient"
+                  gradient={{ from: "red", to: "orange", deg: -45 }}
+                  size="xl"
+                  className={classes.control}
+                  mt={40}
+                >
+                  Zona Propietario/a
+                </Button>
+              </Link>
             </Group>
           </div>
         </div>
