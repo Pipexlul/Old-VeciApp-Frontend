@@ -14,6 +14,7 @@ import {
   Center,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
+import { Link } from "react-router-dom";
 
 import { useIsSM } from "../../../hooks/useIsSM";
 
@@ -86,6 +87,21 @@ const LoginForm: React.FC<LoginFormProps> = ({ userType }) => {
           Zona{" "}
           <Text inherit span>
             {userType === "owner" ? "Propietarios" : "Clientes"}
+            <Link to={`/login/${userType === "owner" ? "user" : "owner"}`}>
+              <Center>
+                <Button
+                  variant="light"
+                  compact
+                  color={userType === "owner" ? "blue" : "green"}
+                  mt={isSM ? "sm" : "md"}
+                >
+                  <Text size="lg" weight={600}>
+                    Ir a Zona{" "}
+                    {userType === "owner" ? "Clientes" : "Propietarios"}
+                  </Text>
+                </Button>
+              </Center>
+            </Link>
           </Text>
         </Title>
         <Title order={3} mt="xl" mb="xl" align="center">
