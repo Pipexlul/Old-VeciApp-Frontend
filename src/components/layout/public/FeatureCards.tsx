@@ -104,7 +104,7 @@ const FeatureCards: React.FC = () => {
       </Text>
 
       <Text className={classes.categoryTitle} ta="center" mt="lg">
-        Para Dueños/as:
+        Para Propietarios/as:
       </Text>
       <SimpleGrid
         cols={3}
