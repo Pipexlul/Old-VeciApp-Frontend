@@ -1,7 +1,7 @@
 import { createHashRouter, Navigate } from "react-router-dom";
 
 import PrivateRoute from "./PrivateRoute";
-import { publicPages } from "../pages";
+import { publicPages, privatePages } from "../pages";
 
 const {
   PublicRoot,
@@ -11,6 +11,10 @@ const {
   PublicRegister: Register,
   PublicLogin: Login,
 } = publicPages;
+
+const {
+  userPages: { UserDashboard },
+} = privatePages;
 
 const router = createHashRouter([
   {
@@ -49,14 +53,34 @@ const router = createHashRouter([
     ],
   },
   {
-    path: "/dashboard/user",
-    element: <PrivateRoute notAuthPath="/login/user" />,
+    path: "/user",
+    element: <PrivateRoute userType="user" />,
     errorElement: null,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="dashboard" />,
+      },
+      {
+        path: "dashboard",
+        element: <UserDashboard />,
+      },
+    ],
   },
   {
-    path: "/dashboard/owner",
-    element: <PrivateRoute notAuthPath="/login/owner" />,
+    path: "/owner",
+    element: <PrivateRoute userType="owner" />,
     errorElement: null,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="dashboard" />,
+      },
+      {
+        path: "dashboard",
+        element: <h1>Owner Dashboard</h1>,
+      },
+    ],
   },
 ]);
 
