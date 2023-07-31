@@ -64,6 +64,16 @@ const router = createHashRouter([
       {
         path: "dashboard",
         element: <UserDashboard />,
+        children: [
+          {
+            index: true,
+            element: <p>home</p>,
+          },
+          {
+            path: "messages",
+            element: <p>messages</p>,
+          },
+        ],
       },
     ],
   },
