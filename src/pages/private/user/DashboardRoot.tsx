@@ -7,7 +7,7 @@ import {
   getStylesRef,
   rem,
 } from "@mantine/core";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { IconLogout } from "@tabler/icons-react";
 
 import { userDashboardData as data } from "../../../config/userDashboardLinks";
@@ -121,7 +121,7 @@ const UserDashboard: React.FC = () => {
         </Navbar>
       }
     >
-      Hola
+      <Outlet />
     </AppShell>
   );
 };
