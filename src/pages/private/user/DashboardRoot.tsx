@@ -87,7 +87,7 @@ const UserDashboard: React.FC = () => {
   const { classes, cx } = useStyles();
 
   const links = data.map((item) => (
-    <NavLink key={item.label} to={item.path}>
+    <NavLink key={item.label} to={item.path} end>
       {({ isActive }) => (
         <Box className={cx(classes.link, { [classes.linkActive]: isActive })}>
           <item.icon className={classes.linkIcon} />
