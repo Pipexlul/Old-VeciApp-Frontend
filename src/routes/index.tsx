@@ -13,7 +13,7 @@ const {
 } = publicPages;
 
 const {
-  userPages: { UserDashboard },
+  userPages: { UserDashboard, UserDashboardHome },
 } = privatePages;
 
 const router = createHashRouter([
@@ -67,7 +67,7 @@ const router = createHashRouter([
         children: [
           {
             index: true,
-            element: <p>home</p>,
+            element: <UserDashboardHome />,
           },
           {
             path: "messages",
