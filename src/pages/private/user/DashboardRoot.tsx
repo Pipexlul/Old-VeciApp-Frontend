@@ -99,6 +99,7 @@ const UserDashboard: React.FC = () => {
 
   return (
     <AppShell
+      asideOffsetBreakpoint="sm"
       navbar={
         <Navbar hidden hiddenBreakpoint="sm" width={{ sm: 300 }} p="md">
           <Navbar.Section grow>
