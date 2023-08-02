@@ -1,4 +1,9 @@
-import { IconHomeSearch, IconMail, IconSettings } from "@tabler/icons-react";
+import {
+  IconHomeSearch,
+  IconMail,
+  IconSettings,
+  IconBasketFilled,
+} from "@tabler/icons-react";
 
 import type { OwnerDashboardLink } from "../types/OwnerDashboardLink";
 
@@ -16,6 +21,11 @@ const ownerDashboardData = makeConst([
     path: "./messages",
     label: "Mensajes",
     icon: IconMail,
+  },
+  {
+    path: "./products",
+    label: "Productos",
+    icon: IconBasketFilled,
   },
   {
     path: "./settings",

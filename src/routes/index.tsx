@@ -102,6 +102,10 @@ const router = createHashRouter([
             element: <NotImplemented />,
           },
           {
+            path: "products",
+            element: <NotImplemented />,
+          },
+          {
             path: "settings",
             element: <NotImplemented />,
           },
