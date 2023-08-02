@@ -1,6 +1,8 @@
 import { createHashRouter, Navigate } from "react-router-dom";
 
 import PrivateRoute from "./PrivateRoute";
+import NotImplemented from "../components/helpers/NotImplemented";
+
 import { publicPages, privatePages } from "../pages";
 
 const {
@@ -71,7 +73,7 @@ const router = createHashRouter([
           },
           {
             path: "messages",
-            element: <p>messages</p>,
+            element: <NotImplemented />,
           },
         ],
       },
