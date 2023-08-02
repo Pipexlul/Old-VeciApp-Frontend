@@ -16,6 +16,7 @@ const {
 
 const {
   userPages: { UserDashboard, UserDashboardHome },
+  ownerPages: { OwnerDashboard },
 } = privatePages;
 
 const router = createHashRouter([
@@ -90,7 +91,21 @@ const router = createHashRouter([
       },
       {
         path: "dashboard",
-        element: <h1>Owner Dashboard</h1>,
+        element: <OwnerDashboard />,
+        children: [
+          {
+            index: true,
+            element: <NotImplemented />,
+          },
+          {
+            path: "messages",
+            element: <NotImplemented />,
+          },
+          {
+            path: "settings",
+            element: <NotImplemented />,
+          },
+        ],
       },
     ],
   },
