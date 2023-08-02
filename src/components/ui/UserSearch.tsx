@@ -2,16 +2,55 @@
 import { z } from "zod";
 import {
   Stack,
-  Center,
-  Paper,
+  Box,
   Text,
   TextInput,
   Title,
   Slider,
   createStyles,
   Divider,
+  rem,
+  Button,
+  SimpleGrid,
+  ScrollArea,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
+import { useRef, useState } from "react";
+import L from "leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Tooltip,
+  MarkerProps,
+  TooltipProps,
+  Circle,
+} from "react-leaflet";
+import { Helmet } from "react-helmet";
+
+import type { NominatimResponse } from "nominatim-browser";
+import { IconBasketFilled, IconMapPinFilled } from "@tabler/icons-react";
+
+import UserSearchStoreListElem from "./UserSearchStoreListElem";
+
+import type { BaseStoreData } from "../../types/StoreData";
+import nominatim from "../../services/nominatim";
+
+import { tablerIconToSvg } from "../../utils/svgUtils";
+
+const imp = (value: string): string => `${value} !important`;
+
+const MARKER_SIZE = 36;
+
+const STORE_SVG = tablerIconToSvg(
+  <IconBasketFilled size={MARKER_SIZE} />,
+  "red"
+);
+
+const HOUSE_SVG = tablerIconToSvg(
+  <IconMapPinFilled size={MARKER_SIZE} />,
+  "green"
+);
 
 const TITLE_MULTIPLIER = 1.7;
 
@@ -20,6 +59,10 @@ const RADIUS_CONFIG = {
   max: 2000,
   defaultVal: 100,
 } as const;
+
+const MAP_SIZE = 500;
+const MAP_SM_MULTIPLIER = 0.75;
+const MAP_SM_SIZE = Math.floor(MAP_SIZE * MAP_SM_MULTIPLIER);
 
 const radiusMarks: { value: number; label: string }[] = ((amount: number) => {
   const markNums: number[] = [];
@@ -39,9 +82,7 @@ const radiusMarks: { value: number; label: string }[] = ((amount: number) => {
 const useStyles = createStyles((theme) => ({
   root: {
     minHeight: "100%",
-  },
-
-  paper: {
+    width: "100%",
     padding: theme.spacing.lg,
   },
 
@@ -54,7 +95,13 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
-  form: {},
+  mapContainer: {
+    height: rem(MAP_SIZE),
+
+    [theme.fn.smallerThan("sm")]: {
+      height: rem(MAP_SM_SIZE),
+    },
+  },
 
   sliders: {
     marginTop: theme.spacing.sm,
@@ -68,6 +115,21 @@ const useStyles = createStyles((theme) => ({
     wordBreak: "break-word",
     cursor: "default",
     WebkitTapHighlightColor: "transparent",
+  },
+
+  markers: {
+    backgroundColor: "transparent",
+    border: "none",
+  },
+
+  tooltips: {
+    fontSize: imp(theme.fontSizes.md),
+    fontWeight: 600,
+    backgroundColor: imp(theme.colors.orange[3]),
+
+    "&::before": {
+      borderTopColor: imp(theme.colors.orange[3]),
+    },
   },
 }));
 
@@ -85,6 +147,46 @@ type UserSearchShape = z.infer<typeof valSchema>;
 const UserSearch: React.FC = () => {
   const { classes, theme } = useStyles();
 
+  const markers: (MarkerProps & {
+    tooltip?: TooltipProps;
+    tooltipLabel?: string;
+  })[] = [];
+
+  const [homeCoords, setHomeCoords] = useState<L.LatLngExpression | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [storeData, setStoreData] = useState<BaseStoreData[]>([]);
+  const mapRef = useRef<L.Map>(null);
+
+  const storesTableElems = storeData.map((store) => {
+    const dist =
+      (homeCoords &&
+        mapRef.current?.distance([+store.lat, +store.lng], homeCoords)) ??
+      0;
+
+    return (
+      <UserSearchStoreListElem
+        key={store.store_id}
+        store_id={store.store_id}
+        owner_name={store.owner_name}
+        store_name={store.store_name}
+        distance={dist}
+      />
+    );
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const STORE_ICON = L.divIcon({
+    html: STORE_SVG,
+    iconSize: [MARKER_SIZE, MARKER_SIZE],
+    className: classes.markers,
+  });
+
+  const HOUSE_ICON = L.divIcon({
+    html: HOUSE_SVG,
+    iconSize: [MARKER_SIZE, MARKER_SIZE],
+    className: classes.markers,
+  });
+
   const form = useForm<UserSearchShape>({
     initialValues: {
       searchFrom: "",
@@ -95,10 +197,69 @@ const UserSearch: React.FC = () => {
     validate: zodResolver(valSchema),
   });
 
+  const addressSearch = async () => {
+    if (!form.validateField("searchFrom").hasError) {
+      const { searchFrom } = form.values;
+
+      const searchRes = (await nominatim.geocode({
+        street: searchFrom,
+        addressdetails: true,
+        country: "Chile",
+        limit: 50,
+      })) as NominatimResponse[];
+
+      if (searchRes.length > 0) {
+        const { lat, lon } = searchRes[0];
+        setHomeCoords([+lat, +lon]);
+
+        setTimeout(() => {
+          mapRef.current?.flyTo([+lat, +lon]);
+        }, 1000);
+      } else {
+        setHomeCoords(null);
+      }
+    }
+  };
+
+  if (homeCoords) {
+    markers.push({
+      position: homeCoords,
+      icon: HOUSE_ICON,
+      tooltip: {
+        className: classes.tooltips,
+        opacity: 1,
+        permanent: true,
+        offset: [0, -20],
+        direction: "top",
+      },
+      tooltipLabel: "Su ubicación",
+    });
+  }
+
+  const markersElems = markers.map((marker) => {
+    return (
+      <Marker
+        key={marker.position.toString()}
+        position={marker.position}
+        icon={marker.icon}
+      >
+        <Tooltip {...marker.tooltip}>{marker.tooltipLabel}</Tooltip>
+      </Marker>
+    );
+  });
+
   return (
-    <Center className={classes.root}>
-      <Paper className={classes.paper} shadow="md" withBorder>
-        <Stack className={classes.form} spacing="xl">
+    <>
+      <Helmet>
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossOrigin=""
+        />
+      </Helmet>
+      <Box className={classes.root}>
+        <Stack spacing="xl">
           <Title
             className={classes.title}
             sx={{ fontFamily: `Greycliff CF, ${theme.fontFamily}` }}
@@ -111,6 +272,9 @@ const UserSearch: React.FC = () => {
             required
             {...form.getInputProps("searchFrom")}
           />
+          <Button variant="light" onClick={addressSearch}>
+            Buscar dirección
+          </Button>
           <Divider />
           <Stack spacing="xs">
             <Text
@@ -143,13 +307,53 @@ const UserSearch: React.FC = () => {
           </Stack>
           <Divider />
           <TextInput
+            disabled
             label="Item a buscar"
-            description="Campo opcional. Si se deja vacío, se mostraran todos los almacenes en el radio"
+            description="Campo opcional. Si se deja vacío, se mostraran todos los almacenes en el radio. (No implementado)"
             placeholder="Arroz Pregraneado"
+            styles={{
+              wrapper: {
+                cursor: "not-allowed",
+              },
+            }}
+            {...form.getInputProps("itemToSearch")}
           />
+          <Button variant="light">Buscar Almacenes</Button>
+          <SimpleGrid
+            cols={2}
+            spacing="md"
+            breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+          >
+            <ScrollArea.Autosize
+              offsetScrollbars
+              mah={{ base: rem(MAP_SM_SIZE), md: rem(MAP_SIZE) }}
+            >
+              <Stack>{storesTableElems}</Stack>
+            </ScrollArea.Autosize>
+            <MapContainer
+              className={classes.mapContainer}
+              center={[-33.4379, -70.6512]}
+              zoom={20}
+              scrollWheelZoom={false}
+              ref={mapRef}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {markersElems}
+              {homeCoords && (
+                <Circle
+                  center={homeCoords}
+                  radius={form.values.radius}
+                  color="blue"
+                />
+              )}
+            </MapContainer>
+          </SimpleGrid>
         </Stack>
-      </Paper>
-    </Center>
+      </Box>
+    </>
   );
 };
 
